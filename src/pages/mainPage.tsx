@@ -1,11 +1,15 @@
 import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import { Container, Col, Row, Form, Button, InputGroup } from "react-bootstrap";
+
+import { addTask } from "../slices/tasksReducer";
 
 const MainPages = () => {
   const [inputValue, setInputValue] = useState("");
-	const [taskList, setTaskList] = useState<string []>([])
 
-
+	const tacks = useAppSelector((state) => state.tasksList.tasks);
+	const dispatch = useAppDispatch()
+	console.log(tacks)
   return (
     <Container className="container-fluid heig-100">
       <Row className="justify-content-center align-content-center h-100">
@@ -13,11 +17,11 @@ const MainPages = () => {
           <h1>TO-DO List</h1>
           <InputGroup>
 						<Form.Control  onChange={(event) => setInputValue(event.target.value)}></Form.Control>
-						<Button onClick={() => setTaskList([...taskList, inputValue])}>Add</Button>
+						<Button onClick={() => dispatch(addTask(inputValue))}>Add</Button>
 					</InputGroup>
-          {taskList.length !== 0 ?
+          {tacks.length !== 0 ?
 						<ul>
-							{taskList.map((task, index) => <li key={index} >{task}</li>)}
+							{tacks.map((task, index) => <li key={index} >{task}</li>)}
 						</ul>
 						: <></>
 					}
